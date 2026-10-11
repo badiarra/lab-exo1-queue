@@ -44,9 +44,9 @@ void vTaskLed(void *pvParam) {
     if (xQueueReceive(distQueue, &distanceRead, portMAX_DELAY) == pdPass) {
 
       // eteindre les DELs
-        ledGreen.off();
-        ledYellow.off();
-        ledRed.off();
+        led->off();
+        //ledYellow.off();
+        //ledRed.off();
 
       if (distanceRead > 0 && distanceRead < 20 && led->getType() == 3) {  //Rouge
         led->on();

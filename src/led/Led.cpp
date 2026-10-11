@@ -1,9 +1,10 @@
 #include "Led.h"
 #include <Arduino.h>
 
-Led::Led(int pin){
+Led::Led(int pin, int ledType){
     _pin = pin;
     _state = false;
+    _type = ledType;
 }
 
 void Led::init() {
@@ -33,3 +34,7 @@ void Led::toggle() {
 bool Led::getState() {
     return _state;
 }
+
+ int Led::getType(){
+    return type;
+ }

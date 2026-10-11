@@ -14,17 +14,18 @@ const int QUEUE_LENGTH = 10;
 
 // Les instances
 
-Led ledGreen(LED_GREEN);
-Led ledYellow(LED_YELLOW);
-Led ledRed(LED_RED);
+Led ledGreen(LED_GREEN,1);
+Led ledYellow(LED_YELLOW,2);
+Led ledRed(LED_RED,3);
 
 HC_SR04 sensor(TRIG_PIN, ECHO_PIN);
 
 // La file
 
 QueueHandle_t distQueue = nullptr;
+
 TaskHandle_t sensorHandle = nullptr;
-TaskHandle_t ledsHandle = nullptr;
+
 TaskHandle_t greenHandle = nullptr;
 TaskHandle_t redHandle = nullptr;
 TaskHandle_t yellowHandle = nullptr;
@@ -32,19 +33,27 @@ TaskHandle_t yellowHandle = nullptr;
 // Les tâches
 
 void vTaskLed(void *pvParam) {
+
+  //Led *led =(Led*)pvParam;
+  Led *led = static_cast<Led*>(pvParam);
+
   float distanceRead;
+
   while (true) {
+
     if (xQueueReceive(distQueue, &distanceRead, portMAX_DELAY) == pdPass) {
+
       // eteindre les DELs
-      ledGreen.off();
-      ledYellow.off();
-      ledRed.off();
-      if (distanceRead > 0 && distanceRead < 20) {
-        ledRed.on();
-      } else if (distanceRead >= 20 && distanceRead < 50) {
-        ledYellow.on();
-      } else if (distanceRead >= 50 ){  //Pour eviter 0 et les distances negatives
-        ledGreen.on();
+        ledGreen.off();
+        ledYellow.off();
+        ledRed.off();
+
+      if (distanceRead > 0 && distanceRead < 20 && led->getType() == 3) {  //Rouge
+        led->on();
+      } else if (distanceRead >= 20 && distanceRead < 50 && led->getType() == 2) { //Jaune
+        led->on();
+      } else if (distanceRead >= 50 && led->getType() == 1){  //Pour eviter 0 et les distances negatives
+        led->on();
       }
     }
     //vTaskDelay(pdMS_TO_TICKS(500));  //Pas indispensable car xQueueReceive bloque aussi la tache
@@ -74,7 +83,9 @@ void setup() {
 
   xTaskCreate(vTaskDistance, "Mesure", 2048, nullptr, 2, &sensorHandle);
 
-  xTaskCreate(vTaskLed, "Led", 2048, nullptr, 1, &ledsHandle);
+  xTaskCreate(vTaskLed, "Led Green", 2048, ledGreen, 1, &greenHandle);
+  xTaskCreate(vTaskLed, "Led Yellow", 2048, ledYellow, 1, &yellowHandle);
+  xTaskCreate(vTaskLed, "Led Red", 2048, ledRed, 1, &redHandle);
 }
 
 void loop() {

@@ -10,6 +10,10 @@ private:
     int trigPin;
     int echoPin;
 
+    TaskHandle_t handle = nullptr;
+
+    xQueueHandle_t queue = nullptr;
+
 public:
 
     HC_SR04(int trig, int echo);
@@ -17,6 +21,14 @@ public:
     void init();
 
     float getDistance();
+
+    static void vTaskSensor( void *pvParam);
+
+    void start();
+
+    void stop();
+
+    void setQueue( xQueueHandle_t queue);
 
 };
 

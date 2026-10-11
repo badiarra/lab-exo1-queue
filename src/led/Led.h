@@ -7,14 +7,17 @@ class Led
     Led(int pin);
     void on();
     void off();
-    void toggle();
-    bool getState();
     void init();
     int getType();
+
+    void setQueue (xQueueHandle_t q);
+    static void vTaskLed(void *pvParam);
+    void start()
   private:
     int _pin;
-    bool _state;
     int _type; //1 Green, 2 Yellow, 3 Red
+    xQueueHandle_t queue = nullptr;
+    TaskHandle_t handle = nullptr;
 };
 
 #endif

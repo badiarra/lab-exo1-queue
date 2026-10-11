@@ -49,3 +49,34 @@ float HC_SR04::getDistance()
 
     return distance;
 }
+
+void HC_SR04::vTaskSensor(void *pvParam){
+
+    HC_SR04 *sensor = static_cast<HC_SR04 *>(pvParam);
+
+    float distanceMeasured;
+
+    while (true) {
+         distanceMeasured = sensor->getDistance();
+        if(sensor->queue != nullptr){
+            xQueueSend(sensor->queue, &distanceMeasured, 0); //Accessible ici car vTaskSensor reste membre de la classe
+        }
+    vTaskDelay(pdMS_TO_TICKS(200));
+  }
+}
+
+void HC_SR04::start(){
+    xTaskCreate(vTaskSensor,"Mesures",2048, this,2,&handle);
+}
+ 
+void HC_SR04::setQueue(xQueueHandle_t dataQueue){
+    queue  = dataQueue;
+}
+
+void Led::stop(){
+    
+    if(handle != nullptr){
+        vTaskDelete(handle);
+    }
+   
+ }

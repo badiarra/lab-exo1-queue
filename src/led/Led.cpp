@@ -3,38 +3,65 @@
 
 Led::Led(int pin, int ledType){
     _pin = pin;
-    _state = false;
     _type = ledType;
+
 }
 
 void Led::init() {
     pinMode(_pin, OUTPUT);
     digitalWrite(_pin, LOW);
-    _state = false;
 }
 
 void Led::on() {
     digitalWrite(_pin, HIGH);
-    _state = true;
 }
 
 void Led::off() {
     digitalWrite(_pin, LOW);
-    _state = false;
-}
-
-void Led::toggle() {
-    if (_state) {
-        off();
-    } else {
-        on();
-    }
-}
-
-bool Led::getState() {
-    return _state;
 }
 
  int Led::getType(){
-    return type;
+    return _type;
  }
+
+ void Led::vTaskLed(void *ptr){
+
+   // Led * led = (Led *)ptr;
+    Led * led = static_cast<Led *>(ptr);
+
+    float distanceRead;
+
+  while (true) {
+
+    if (xQueueReceive(led->queue, &distanceRead, portMAX_DELAY) == pdPass) {
+
+      // eteindre les DELs
+        led->off();
+
+      if (distanceRead > 0 && distanceRead < 20 && led->getType() == 3) {  //Rouge
+        led->on();
+      } else if (distanceRead >= 20 && distanceRead < 50 && led->getType() == 2) { //Jaune
+        led->on();
+      } else if (distanceRead >= 50 && led->getType() == 1){  //Pour eviter 0 et les distances negatives
+        led->on();
+      }
+    }
+    //vTaskDelay(pdMS_TO_TICKS(500));  //Pas indispensable car xQueueReceive bloque aussi la tache
+  }
+ }
+
+
+ void Led::start(){
+
+    xTaskCreate(vTaskLed,
+                "Task Led",
+                2048,
+                this,
+                1,
+                &handle);
+ }
+
+
+ void Led::setQueue(xQueueHandle_t dataQueue){
+    queue  = dataQueue;
+}

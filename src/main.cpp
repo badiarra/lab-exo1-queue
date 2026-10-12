@@ -10,17 +10,17 @@ const int TRIG_PIN = 20;
 const int ECHO_PIN = 21;
 
 
-const char* RED="RED";
-const char* GREEN="GREEN",
-const char* YELLOW="YELLOW";
+const char* RED = "RED";
+const char* GREEN = "GREEN",
+const char* YELLOW  = "YELLOW";
 // La file
 const int QUEUE_LENGTH = 10;
 
 // Les instances
 
-Led ledGreen(LED_GREEN,GREEN);
-Led ledYellow(LED_YELLOW,YELLOW);
-Led ledRed(LED_RED,RED);
+Led ledGreen(LED_GREEN, GREEN);
+Led ledYellow(LED_YELLOW, YELLOW);
+Led ledRed(LED_RED, RED);
 
 HC_SR04 sensor(TRIG_PIN, ECHO_PIN);
 
@@ -54,9 +54,9 @@ void vTaskLed(void *pvParam) {
 
       if (distanceRead > 0 && distanceRead < 20 && led->getName() == RED) {  //Rouge
         led->on();
-      } else if (distanceRead >= 20 && distanceRead < 50 && led->getType() == YELLOW) { //Jaune
+      } else if (distanceRead >= 20 && distanceRead < 50 && led->getName() == YELLOW) { //Jaune
         led->on();
-      } else if (distanceRead >= 50 && led->getType() == GREEN){  //Pour eviter 0 et les distances negatives
+      } else if (distanceRead >= 50 && led->getName() == GREEN){  //Pour eviter 0 et les distances negatives
         led->on();
       }
     }
@@ -65,12 +65,17 @@ void vTaskLed(void *pvParam) {
 }
 
 void vTaskDistance(void *pvParam) {
+
   float distanceMeasured;
+
   while (true) {
+
     distanceMeasured = sensor.getDistance();
+
     if(distQueue != nullptr){
        xQueueSend(distQueue, &distanceMeasured, 0);
     }
+    
     vTaskDelay(pdMS_TO_TICKS(200));
   }
 }

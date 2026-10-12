@@ -12,7 +12,7 @@ class Led
     const char* getName();
   private:
     int _pin;
-    const char*_name; //Une constante
+    const char* _name; //Une constante
 };
 
 #endif

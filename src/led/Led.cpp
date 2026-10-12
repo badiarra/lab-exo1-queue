@@ -1,9 +1,9 @@
 #include "Led.h"
 #include <Arduino.h>
 
-Led::Led(int pin, int ledType){
+Led::Led(int pin, const char* name){
     _pin = pin;
-    _type = ledType;
+    _name = name;
 }
 
 void Led::init() {
@@ -19,6 +19,6 @@ void Led::off() {
     digitalWrite(_pin, LOW);
 }
 
- int Led::getType(){
-    return _type;
+ const char* Led::getName(){
+    return _name;
  }

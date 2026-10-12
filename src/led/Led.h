@@ -4,15 +4,15 @@
 class Led 
 {
   public:
-    Led(int pin);
+    Led(int pin, const char* name);
     void on();
     void off();
   
     void init();
-    int getType();
+    const char* getName();
   private:
     int _pin;
-    int _type; //1 Green, 2 Yellow, 3 Red
+    const char*_name; //Une constante
 };
 
 #endif

@@ -9,14 +9,18 @@ const int LED_YELLOW = 42;
 const int TRIG_PIN = 20;
 const int ECHO_PIN = 21;
 
+
+const char* RED="RED";
+const char* GREEN="GREEN",
+const char* YELLOW="YELLOW";
 // La file
 const int QUEUE_LENGTH = 10;
 
 // Les instances
 
-Led ledGreen(LED_GREEN,1);
-Led ledYellow(LED_YELLOW,2);
-Led ledRed(LED_RED,3);
+Led ledGreen(LED_GREEN,GREEN);
+Led ledYellow(LED_YELLOW,YELLOW);
+Led ledRed(LED_RED,RED);
 
 HC_SR04 sensor(TRIG_PIN, ECHO_PIN);
 
@@ -48,11 +52,11 @@ void vTaskLed(void *pvParam) {
         //ledYellow.off();
         //ledRed.off();
 
-      if (distanceRead > 0 && distanceRead < 20 && led->getType() == 3) {  //Rouge
+      if (distanceRead > 0 && distanceRead < 20 && led->getName() == RED) {  //Rouge
         led->on();
-      } else if (distanceRead >= 20 && distanceRead < 50 && led->getType() == 2) { //Jaune
+      } else if (distanceRead >= 20 && distanceRead < 50 && led->getType() == YELLOW) { //Jaune
         led->on();
-      } else if (distanceRead >= 50 && led->getType() == 1){  //Pour eviter 0 et les distances negatives
+      } else if (distanceRead >= 50 && led->getType() == GREEN){  //Pour eviter 0 et les distances negatives
         led->on();
       }
     }
@@ -83,9 +87,9 @@ void setup() {
 
   xTaskCreate(vTaskDistance, "Mesure", 2048, nullptr, 2, &sensorHandle);
 
-  xTaskCreate(vTaskLed, "Led Green", 2048, ledGreen, 1, &greenHandle);
-  xTaskCreate(vTaskLed, "Led Yellow", 2048, ledYellow, 1, &yellowHandle);
-  xTaskCreate(vTaskLed, "Led Red", 2048, ledRed, 1, &redHandle);
+  xTaskCreate(vTaskLed, GREEN, 2048, ledGreen, 1, &greenHandle);
+  xTaskCreate(vTaskLed, YELLOW, 2048, ledYellow, 1, &yellowHandle);
+  xTaskCreate(vTaskLed, RED, 2048, ledRed, 1, &redHandle);
 }
 
 void loop() {

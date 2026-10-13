@@ -69,7 +69,7 @@ void HC_SR04::start(){
     xTaskCreate(vTaskSensor,"Mesures",2048, this,2,&handle);
 }
  
-void HC_SR04::setQueue(xQueueHandle_t dataQueue){
+void HC_SR04::setQueue(QueueHandle_t dataQueue){
     queue  = dataQueue;
 }
 

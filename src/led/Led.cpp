@@ -62,6 +62,6 @@ void Led::off() {
  }
 
 
- void Led::setQueue(xQueueHandle_t dataQueue){
+ void Led::setQueue(QueueHandle_t dataQueue){
     queue  = dataQueue;
 }

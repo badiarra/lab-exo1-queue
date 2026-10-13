@@ -12,7 +12,7 @@ private:
 
     TaskHandle_t handle = nullptr;
 
-    xQueueHandle_t queue = nullptr;
+    QueueHandle_t queue = nullptr;
 
 public:
 
@@ -28,7 +28,7 @@ public:
 
     void stop();
 
-    void setQueue( xQueueHandle_t queue);
+    void setQueue( QueueHandle_t queue);
 
 };
 

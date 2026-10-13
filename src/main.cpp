@@ -34,7 +34,7 @@ TaskHandle_t yellowHandle = nullptr;
 void vTaskLed(void *pvParam) {
   float distanceRead;
   while (true) {
-    if (xQueueReceive(distQueue, &distanceRead, portMAX_DELAY) == pdPass) {
+    if (xQueueReceive(distQueue, &distanceRead, portMAX_DELAY) == pdPASS) {
       // eteindre les DELs
       ledGreen.off();
       ledYellow.off();

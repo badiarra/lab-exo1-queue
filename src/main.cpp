@@ -45,7 +45,7 @@ void vTaskLed(void *pvParam) {
 
   while (true) {
 
-    if (xQueueReceive(distQueue, &distanceRead, portMAX_DELAY) == pdPass) {
+    if (xQueueReceive(distQueue, &distanceRead, portMAX_DELAY) == pdPASS) {
 
       // eteindre les DELs
         led->off();

@@ -1,5 +1,4 @@
 #include "Led.h"
-#include <Arduino.h>
 
 Led::Led(int pin, int ledType){
     _pin = pin;
@@ -33,7 +32,7 @@ void Led::off() {
 
   while (true) {
 
-    if (xQueueReceive(led->queue, &distanceRead, portMAX_DELAY) == pdPass) {
+    if (xQueueReceive(led->queue, &distanceRead, portMAX_DELAY) == pdPASS) {
 
       // eteindre les DELs
         led->off();

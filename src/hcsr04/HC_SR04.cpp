@@ -73,7 +73,7 @@ void HC_SR04::setQueue(QueueHandle_t dataQueue){
     queue  = dataQueue;
 }
 
-void Led::stop(){
+void HC_SR04::stop(){
     
     if(handle != nullptr){
         vTaskDelete(handle);

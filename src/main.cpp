@@ -6,8 +6,8 @@
 const int LED_GREEN = 40;
 const int LED_RED = 41;
 const int LED_YELLOW = 42;
-const int TRIG_PIN = 20;
-const int ECHO_PIN = 21;
+const int TRIG_PIN = 37;
+const int ECHO_PIN = 39;
 
 // La file
 const int QUEUE_LENGTH = 10;

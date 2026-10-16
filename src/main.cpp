@@ -6,12 +6,12 @@
 const int LED_GREEN = 40;
 const int LED_RED = 41;
 const int LED_YELLOW = 42;
-const int TRIG_PIN = 20;
-const int ECHO_PIN = 21;
+const int TRIG_PIN = 37;
+const int ECHO_PIN = 39;
 
 
 const char* RED = "RED";
-const char* GREEN = "GREEN",
+const char* GREEN = "GREEN";
 const char* YELLOW  = "YELLOW";
 // La file
 const int QUEUE_LENGTH = 10;
@@ -92,9 +92,9 @@ void setup() {
 
   xTaskCreate(vTaskDistance, "Mesure", 2048, nullptr, 2, &sensorHandle);
 
-  xTaskCreate(vTaskLed, GREEN, 2048, ledGreen, 1, &greenHandle);
-  xTaskCreate(vTaskLed, YELLOW, 2048, ledYellow, 1, &yellowHandle);
-  xTaskCreate(vTaskLed, RED, 2048, ledRed, 1, &redHandle);
+  xTaskCreate(vTaskLed, GREEN, 2048, &ledGreen, 1, &greenHandle);
+  xTaskCreate(vTaskLed, YELLOW, 2048, &ledYellow, 1, &yellowHandle);
+  xTaskCreate(vTaskLed, RED, 2048, &ledRed, 1, &redHandle);
 }
 
 void loop() {
